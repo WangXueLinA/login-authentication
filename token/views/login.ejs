@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    //拦截器，
+    axios.interceptors.request.use(function (config) {
+      // console.log("请求发出前，执行的方法")
+      return config;
+    }, function (error) {
+      return Promise.reject(error);
+    });
+
+    axios.interceptors.response.use(function (response) {
+      const { authorization } = response.headers
+      authorization && localStorage.setItem("token", authorization)
+      return response;
+    }, function (error) {
+
+      return Promise.reject(error);
+    });
+  </script>
+</head>
+
+<body>
+  <h1>token登录页面</h1>
+
+  <div>
+    <div>用户名:<input id="username" /></div>
+    <div>密码:<input type="password" id="password" /></div>
+    <div><button id="login">登录</button></div>
+  </div>
+
+  <script>
+    var username = document.querySelector("#username")
+    var password = document.querySelector("#password")
+    var login = document.querySelector("#login")
+
+    login.onclick = () => {
+      axios.post("/login", {
+        username: username.value,
+        password: password.value,
+      }).then(res => {
+        if (res.data.code === 200) {
+          //存储token
+          location.href = "/"
+        } else {
+          alert("用户名密码不匹配")
+        }
+      })
+    }
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <h1>home模板页面</h1>
+  <div>欢迎<%= username%>回来</div>
+
+  <button id="logout">退出登录</button>
+</body>
+
+<script>
+  const ologout = document.querySelector("#logout")
+
+  ologout.onclick = () => {
+    fetch(`/login`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+      }
+    }).then(res => res.json()).then(res => {
+      if (res.code === 200) {
+        location.href = "/login"
+        alert("退出成功")
+      }
+    })
+
+  }
+</script>
+
+</html>
